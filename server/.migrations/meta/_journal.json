@@ -15,6 +15,27 @@
       "when": 1728514990205,
       "tag": "0001_typical_the_fallen",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1728517151312,
+      "tag": "0002_daily_mister_fear",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1728517361077,
+      "tag": "0003_organic_squadron_sinister",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1728517527799,
+      "tag": "0004_curious_weapon_omega",
+      "breakpoints": true
     }
   ]
 }

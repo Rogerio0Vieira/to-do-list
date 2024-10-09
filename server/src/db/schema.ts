@@ -6,7 +6,7 @@ export const tasks = pgTable('tasks', {
   id: text('id').primaryKey().$defaultFn(()=>createId()),
   title: text('title').notNull(),
   description: text('description'),
-  status: text('status').default('pending'),
+  status: boolean('status').default(false),
   created_at: timestamp('created_at', {withTimezone: true}).notNull().defaultNow(),
   priority: text('priority').default('low'),
 })
