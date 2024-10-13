@@ -1,9 +1,11 @@
 import fastify from "fastify";
-import { createTask } from "../functions/create-task";
 import { serializerCompiler, validatorCompiler, type ZodTypeProvider } from "fastify-type-provider-zod";
-import {z} from "zod"
-import { getWeekPendingTasks } from "../functions/get-week-pending-tasks";
-import { createTaskCompletion } from "../functions/create-task-completion";
+import { createTaskRoute } from "./routes/create-task";
+import { createCompletionRoute } from "./routes/create-completions";
+import { getPendingTasksRoute } from "./routes/get-pending-tasks";
+import { getWeekSummaryRoute } from "./routes/get-week-summary";
+import fastifyCors from "@fastify/cors";
+
 
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
@@ -11,54 +13,20 @@ const app = fastify().withTypeProvider<ZodTypeProvider>()
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
-app.get('/pending-tasks', async () =>{
-  const {pendingTasks} = await getWeekPendingTasks()
-
-  return {pendingTasks}
+app.register(fastifyCors, {
+  origin: '*',
 })
 
-app.post('/tasks', {
-  schema: {
-    body: z.object({
-      title: z.string(),
-      description: z.string(),
-      status: z.boolean(),
-      priority: z.union([
-        z.literal('low'),
-        z.literal('medium'),
-        z.literal('high'),
-      ]),
-      desiredWeeklyFrequency: z.number(),
-    })
-  }
-} ,  async (request) =>{
-  const {description, title, priority, status, desiredWeeklyFrequency} = request.body
+app.register(createTaskRoute)
+app.register(createCompletionRoute)
+app.register(getPendingTasksRoute)
+app.register(getWeekSummaryRoute)
 
-  await createTask({
-    title,
-    description,
-    priority,
-    status,
-    desiredWeeklyFrequency
-  })
-})
-
-app.post('/completions', {
-  schema: {
-    body: z.object({
-      taskId: z.string(),
-    })
-  }
-} ,  async (request) =>{
-  const {taskId} = request.body
-
-  await createTaskCompletion({
-    taskId
-  })
-})
 
 app.listen({
   port: 3333,
 }).then(()=>{
   console.log('HTTP sever runing')
 })
+
+
