@@ -21,13 +21,14 @@ export async function getWeekPendingTasks(){
       created_at: tasks.created_at,
       status: tasks.status,
       priority: tasks.priority,
+      desiredWeeklyFrequency: tasks.desiredWeeklyFrequency
     })
     .from(tasks)
     .where(lte(tasks.created_at, lastDayOfWeek))
   )
 
 
-  const tasksCompletionCounts = db.$with('tasks_completion_counts').as(
+  const taskCompletionCounts = db.$with('tasks_completion_counts').as(
     db.select({
       taskId: taskCompletions.taskId,
       completionCount: count(taskCompletions.id).as('completionCount'),
@@ -40,17 +41,20 @@ export async function getWeekPendingTasks(){
   )
 
 
-  const pendingTasks = await db.with(tasksCreatedUpToWeek, tasksCompletionCounts)
+  const pendingTasks = await db.with(tasksCreatedUpToWeek, taskCompletionCounts)
     .select({
       id: tasksCreatedUpToWeek.id,
       title: tasksCreatedUpToWeek.title,
-      //maybe put the description here
-      priority: tasksCreatedUpToWeek.priority
+      desiredWeeklyFrequency: tasksCreatedUpToWeek.desiredWeeklyFrequency,
+      priority: tasksCreatedUpToWeek.priority,
+      completionCount: sql`
+       COALESCE(${taskCompletionCounts.completionCount}, 0)
+      `.mapWith(Number),
     })
     .from(tasksCreatedUpToWeek)
     .leftJoin(
-      tasksCompletionCounts,
-      eq(tasksCompletionCounts.taskId, tasksCreatedUpToWeek.id )
+      taskCompletionCounts,
+      eq(taskCompletionCounts.taskId, tasksCreatedUpToWeek.id )
     )
 
   return {
