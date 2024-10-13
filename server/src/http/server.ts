@@ -3,6 +3,7 @@ import { createTask } from "../functions/create-task";
 import { serializerCompiler, validatorCompiler, type ZodTypeProvider } from "fastify-type-provider-zod";
 import {z} from "zod"
 import { getWeekPendingTasks } from "../functions/get-week-pending-tasks";
+import { createTaskCompletion } from "../functions/create-task-completion";
 
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
@@ -12,7 +13,7 @@ app.setSerializerCompiler(serializerCompiler);
 
 app.get('/pending-tasks', async () =>{
   const {pendingTasks} = await getWeekPendingTasks()
-  
+
   return {pendingTasks}
 })
 
@@ -27,16 +28,32 @@ app.post('/tasks', {
         z.literal('medium'),
         z.literal('high'),
       ]),
+      desiredWeeklyFrequency: z.number(),
     })
   }
 } ,  async (request) =>{
-  const {description, title, priority, status} = request.body
+  const {description, title, priority, status, desiredWeeklyFrequency} = request.body
 
   await createTask({
     title,
     description,
     priority,
-    status
+    status,
+    desiredWeeklyFrequency
+  })
+})
+
+app.post('/completions', {
+  schema: {
+    body: z.object({
+      taskId: z.string(),
+    })
+  }
+} ,  async (request) =>{
+  const {taskId} = request.body
+
+  await createTaskCompletion({
+    taskId
   })
 })
 
