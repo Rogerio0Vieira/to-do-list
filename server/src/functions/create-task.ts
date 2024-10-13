@@ -6,18 +6,14 @@ interface CreateTaskRequest {
   description: string | null,
   priority: string | null,
   status: boolean
+  desiredWeeklyFrequency: number
 }
 
-
-export async function createTask({title, description, priority, status}: CreateTaskRequest ){
-  const result = await db.insert(tasks).values({
-    title,
-    description,
-    priority,
-    status
-  }).returning()
-
-  const task = result[0]
+export async function createTask({title, description, priority, status, desiredWeeklyFrequency}: CreateTaskRequest ){
+  const task = await db
+    .insert(tasks)
+    .values({ title, description, priority, status, desiredWeeklyFrequency })
+    .returning()
 
   return {
     task,
