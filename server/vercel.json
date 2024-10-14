@@ -1,11 +1,22 @@
 {
+    "name": "teste",
     "version": 2,
-    "builds": [{
-        "src": "./src/http/server.ts",
+    "public": true,
+    "functions": {
+      "api/users/**/*.js": {
+        "maxDuration": 30
+      }
+    },
+    "builds": [
+      {
+        "src": "server.ts",
         "use": "@vercel/node"
-    }],
-    "routes": [{
-        "src": "(.*)" ,
-        "dest": "./src/http/server.ts"
-    }]
-}
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "server.ts"
+      }
+    ]
+  }
