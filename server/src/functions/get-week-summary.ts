@@ -58,7 +58,13 @@ export async function getWeekSummary() {
       .orderBy(desc(taskscompletedInWeek.completedAtDate))
   )
 
-  const summary = await db
+  type TasksPerDay = Record<string, {
+    id: string;
+    title: string;
+    completedAt: string
+  }[]>
+
+  const result = await db
     .with(tasksCreatedUpToWeek, taskscompletedInWeek, tasksCompletedByWeekDay)
     .select({
       completed: sql`(SELECT COUNT(*) FROM ${taskscompletedInWeek})`.mapWith(
@@ -68,7 +74,7 @@ export async function getWeekSummary() {
         sql`(SELECT SUM(${tasks.desiredWeeklyFrequency}) FROM ${tasksCreatedUpToWeek})`.mapWith(
           Number
         ),
-      tasksPerDay: sql`
+      tasksPerDay: sql<TasksPerDay>`
         JSON_OBJECT_AGG(
           ${tasksCompletedByWeekDay.completedAtDate},
           ${tasksCompletedByWeekDay.completions}
@@ -78,6 +84,6 @@ export async function getWeekSummary() {
     .from(tasksCompletedByWeekDay)
 
   return {
-    summary: summary[0],
+    summary: result[0],
   }
 }

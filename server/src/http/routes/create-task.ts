@@ -7,24 +7,14 @@ export const createTaskRoute: FastifyPluginAsyncZod = async  (app) => {
     schema: {
       body: z.object({
         title: z.string(),
-        description: z.string(),
-        status: z.boolean(),
-        priority: z.union([
-          z.literal('low'),
-          z.literal('medium'),
-          z.literal('high'),
-        ]),
         desiredWeeklyFrequency: z.number(),
       })
     }
   } ,  async (request) =>{
-    const {description, title, priority, status, desiredWeeklyFrequency} = request.body
+    const {title, desiredWeeklyFrequency} = request.body
 
     await createTask({
       title,
-      description,
-      priority,
-      status,
       desiredWeeklyFrequency
     })
   })

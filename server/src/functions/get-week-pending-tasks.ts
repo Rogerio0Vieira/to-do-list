@@ -17,10 +17,7 @@ export async function getWeekPendingTasks(){
     db.select({
       id: tasks.id,
       title: tasks.title,
-      description: tasks.description,
       created_at: tasks.created_at,
-      status: tasks.status,
-      priority: tasks.priority,
       desiredWeeklyFrequency: tasks.desiredWeeklyFrequency
     })
     .from(tasks)
@@ -46,7 +43,6 @@ export async function getWeekPendingTasks(){
       id: tasksCreatedUpToWeek.id,
       title: tasksCreatedUpToWeek.title,
       desiredWeeklyFrequency: tasksCreatedUpToWeek.desiredWeeklyFrequency,
-      priority: tasksCreatedUpToWeek.priority,
       completionCount: sql`
        COALESCE(${taskCompletionCounts.completionCount}, 0)
       `.mapWith(Number),
@@ -58,7 +54,7 @@ export async function getWeekPendingTasks(){
     )
 
   return {
-    pendingTasks,
+    pendingTasks
   }
 
 }

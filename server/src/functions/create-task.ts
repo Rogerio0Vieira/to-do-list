@@ -3,16 +3,13 @@ import { tasks } from "../db/schema"
 
 interface CreateTaskRequest {
   title: string
-  description: string | null,
-  priority: string | null,
-  status: boolean
   desiredWeeklyFrequency: number
 }
 
-export async function createTask({title, description, priority, status, desiredWeeklyFrequency}: CreateTaskRequest ){
+export async function createTask({title, desiredWeeklyFrequency}: CreateTaskRequest ){
   const task = await db
     .insert(tasks)
-    .values({ title, description, priority, status, desiredWeeklyFrequency })
+    .values({ title, desiredWeeklyFrequency })
     .returning()
 
   return {
