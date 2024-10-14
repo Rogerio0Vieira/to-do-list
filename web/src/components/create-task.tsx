@@ -156,10 +156,10 @@ export function CreateTask() {
           <div className="flex items-center gap-3">
             <DialogClose asChild>
               <Button type="button" className="flex-1" variant="secondary">
-                Fechar
+                Close
               </Button>
             </DialogClose>
-            <Button className="flex-1">Salvar</Button>
+            <Button className="flex-1">Submmit</Button>
           </div>
         </form>
       </div>
