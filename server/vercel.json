@@ -2,11 +2,6 @@
     "name": "teste",
     "version": 2,
     "public": true,
-    "functions": {
-      "api/users/**/*.js": {
-        "maxDuration": 30
-      }
-    },
     "builds": [
       {
         "src": "server.ts",
