@@ -7,7 +7,7 @@ export async function createTask({
   title,
   desiredWeeklyFrequency,
 }: CreateTaskRequest) {
-  await fetch('http://localhost:3333/tasks', {
+  await fetch('https://to-do-list-0owk.onrender.com/tasks', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

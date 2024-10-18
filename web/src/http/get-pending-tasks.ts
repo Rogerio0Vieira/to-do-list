@@ -8,7 +8,7 @@ type PendingTasksResponse = {
 
 
 export async function getPendingTasks(): Promise<PendingTasksResponse> {
-  const response = await fetch('http://localhost:3333/pending-tasks')
+  const response = await fetch('https://to-do-list-0owk.onrender.com/pending-tasks')
   const data = await response.json()
 
   return data.pendingTasks
