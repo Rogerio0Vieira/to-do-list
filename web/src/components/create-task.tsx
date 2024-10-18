@@ -47,15 +47,15 @@ export function CreateTask() {
       <div className="flex flex-col gap-6 h-5/6">
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
-            <DialogTitle>Cadastrar meta</DialogTitle>
+            <DialogTitle>Register task</DialogTitle>
             <DialogClose>
               <X className="size-5 text-zinc-600" />
             </DialogClose>
           </div>
 
           <DialogDescription>
-            Adicione atividades que te fazem bem e que você quer continuar
-            praticando toda semana.
+            Add activities that are good for you and that you want to continue
+            practicing every week.
           </DialogDescription>
         </div>
 
